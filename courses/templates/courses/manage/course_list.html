@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} My Courses {% endblock %}
+{% block content %}
+    <div class="jumbotron jumbotron-fluid banner" style="min-height: 70vh;">
+        <div class="container text-center">
+            <h2 class="display-4">My Courses</h2>
+            <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis sed, alias accusamus qui magni cupiditate sapiente. Alias, eum! Ab, tempora quibusdam. Et adipisci voluptatibus illo. Autem nisi corporis obcaecati enim?</p>
+            <a href="{% url 'course_create' %}" class="btn btn-success btn-lg">Create New Course</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row my-5">
+            {% for obj in object_list %}
+                <div class="col-md-4 m-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ obj.title|title }}</h5>
+                            <p class="card-text">{{ obj.overview|truncatewords_html:30 }}</p>
+                            <div>
+                                <a href="{% url 'course_edit' obj.pk %}" class="card-link btn btn-warning">Edit</a>
+                                <a href="{% url 'course_module_update' obj.pk %}" class="card-link btn btn-info">Edit Modules</a>
+                                <a href="{% url 'course_delete' obj.pk %}" class="card-link btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-danger font-weight-bold">You haven't created any courses yet!</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
