@@ -15,6 +15,8 @@ from .forms import ModuleFormSet
 from django.forms.models import modelform_factory
 from django.apps import apps
 
+from braces.views import CsrfExemptMixin, JSONRequestResponseMixin
+
 
 class OwnerMixin(object):
     def get_queryset(self):
@@ -49,7 +51,7 @@ class CourseDeleteView(PermissionRequiredMixin, OwnerCourseMixin, DeleteView):
     success_url = reverse_lazy('manage_course_list')
     template_name = 'courses/manage/course_del.html'
 
-class CourseModuleUpdateView(TemplateResponseMixin, View):
+class CourseModuleUpdateView(LoginRequiredMixin, TemplateResponseMixin, View):
     template_name = 'courses/manage/module_formset.html'
     course = None
     
@@ -109,3 +111,32 @@ class ContentCreateUpdateView(LoginRequiredMixin, TemplateResponseMixin, View):
                 Content.objects.create(module=self.module, item=obj)
             return redirect('module_content_list', self.module.id)
         return self.render_to_response({'form':form, 'object':self.obj})
+
+
+class ContentDeleteView(View):
+    def post(self, request, id):
+        content = get_object_or_404(Content, id=id, module__course__owner=request.user)
+        module = content.module
+        content.item.delete()
+        content.delete()
+        return redirect('module_content_list', module.id)
+
+class ModuleContentListView(TemplateResponseMixin, View):
+    template_name = 'courses/manage/module_content_list.html'
+    
+    def get(self, request, module_id):
+        module = get_object_or_404(Module, id=module_id, course__owner=request.user)
+        return self.render_to_response({'module':module})
+
+class ModuleOrderView(CsrfExemptMixin, JSONRequestResponseMixin, View):
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Module.objects.filter(id=id, course__owner=request.user).update(order=order)
+        return self.render_json_response({'saved':'OK'})
+
+class ContentOrderView(CsrfExemptMixin, JSONRequestResponseMixin, View):
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Content.objects.filter(id=id, module__course__owner=request.user).update(order=order)
+        return self.render_json_response({'saved':'OK'})
+        
