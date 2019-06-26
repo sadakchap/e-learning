@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    {% if subject %}
+        {{ subject.title|title }} Courses
+    {% else %}
+        All Courses
+    {% endif %}
+{% endblock %}
+{% block mystyles %}
+    <link rel="stylesheet" href="{% static 'courses/css/course_list.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="jumbotron jumbotron-fluid banner m-0">
+        <div class="container text-center">
+            <h2 class="display-4">All Courses Available</h2>
+            <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, dolorem ut assumenda reprehenderit mollitia voluptas repellendus quod earum. Debitis placeat nobis nesciunt illum eligendi consequatur dolorum doloribus maiores veniam.</p>
+        </div>
+    </div>
+    <section id="sec1">
+        <aside class="subject-sidebar">
+            <h2>Subjects</h2>
+            <ul>
+                <li>
+                    <a href="{% url 'course_list' %}" class="{% if not subject %}selected{% endif %}">All</a>
+                </li>
+                {% for sub in subjects %}
+                    <li>
+                        <a href="{% url 'course_list_subject' sub.slug %}" class="{% if sub == subject %}selected{% endif %}">
+                            {{ sub.title|title}} <br> <span class="count text-muted small">{{ sub.courses.count }} courses </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+        <main class="courses">
+            {% for c in courses %}
+                {% with sub=c.subject %}
+                    <div class="course-bx">
+                        <h2><a href="{% url 'course_detail' c.slug %}">{{ c.title|title }}</a></h2>
+                        <div class="course-overview">
+                            {{ c.overview|truncatewords:20|safe }}
+                        </div>
+                        <p class="course-options">
+                            <a href="{% url 'course_list_subject' sub.slug %}" class="btn">
+                                {{ sub }}
+                            </a>
+                            <span class="text-muted">{{ c.total_modules }} modules</span>
+                        </p>
+                        <span> Instructor: {{ c.owner }}</span>
+                    </div>
+                {% endwith %}
+            {% empty %}
+                <p class="text-muted lead">
+                    No courses are available.
+                </p>
+            {% endfor %}
+        </main>
+    </section>
+{% endblock %}

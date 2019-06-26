@@ -36,6 +36,7 @@ h2.course-title
     margin: 20px 0;
     padding: 10px auto;
     color: aliceblue;
+    background: #071e35;
     text-decoration: none;
     border: 0;
     transition: .5s;
@@ -95,4 +96,35 @@ h2.course-title
     color: #ddd;
     font-weight: 700;
     box-shadow: 10px 10px 25px rgba(0,0,0,.2);
+}
+.module-contents
+{
+    border: 1px groove #167de426;
+    padding: 20px;
+    margin: 5px 0;
+    transition: .5s;
+}
+.module-contents:hover
+{
+    border: 1px groove #167de426;
+    box-shadow: 0 0 20px #167de426;
+}
+.module-contents p
+{
+    margin: 0;
+    padding: 0;
+    font-size: 1.12rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.module-contents .content-options
+{
+    width: 100%;
+    margin: 0;
+    padding: 20px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }

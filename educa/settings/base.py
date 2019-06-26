@@ -1,4 +1,5 @@
 import os
+from django.urls import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -6,6 +7,7 @@ SECRET_KEY = '=jcu@u7z%5a-e)3ok=%y0c=+*goh%bkl#tp35h)ccv^3o5_$r8'
 
 INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
+    'students.apps.StudentsConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -15,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'crispy_forms',
+    'embed_video',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -97,4 +100,4 @@ MEDIA_ROOT = os.path.join(VENV_PATH, 'media')
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
