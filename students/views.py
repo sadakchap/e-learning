@@ -54,6 +54,6 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         if 'module_id' in self.kwargs:
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
         else:
-            context['module'] = course.objects.all()[0]
+            context['module'] = course.module.all()[0]
         return context
         
