@@ -9,6 +9,8 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('course/', include('courses.urls')),
     path('students/', include('students.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include('courses.api.urls', namespace='api')),
 ]
 
 if settings.DEBUG:
